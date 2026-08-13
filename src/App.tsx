@@ -8,10 +8,11 @@ import {
 } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { ScrambleIn } from './components/ScrambleText';
-import { ConnectAILabLogo } from './components/ConnectAILabLogo';
+import { ArcanaSealLogo } from './components/ArcanaSealLogo';
 import { Language } from './types/reading';
 import { ARCANA_PRODUCTS, ProductId } from './config/products';
 import { MockCheckoutSummary } from './components/MockCheckoutSummary';
+import { trackPurchaseIntent } from './services/purchaseIntentAnalytics';
 import { VIDEO_URLS } from './config/videos';
 import { DICTIONARY } from './config/dictionary';
 import { ReadingExperience } from './components/ReadingExperience';
@@ -413,7 +414,7 @@ export default function App() {
       </section>
 
       {/* ════════════════ SECTION 5: ARCHITECTURE ════════════════ */}
-      <section className="min-h-screen flex items-center justify-center bg-black py-24 sm:py-32 px-6">
+      <section id="about" className="min-h-screen flex items-center justify-center bg-black py-24 sm:py-32 px-6">
         <div className="max-w-5xl mx-auto text-center w-full">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -606,7 +607,15 @@ export default function App() {
                   <div className="pt-4 border-t border-white/5">
                     <button
                       type="button"
-                      onClick={() => setSelectedProductId(prod.id)}
+                      onClick={() => {
+                        trackPurchaseIntent({
+                          event: 'premium_product_clicked',
+                          productId: prod.id,
+                          language,
+                          source: 'pricing',
+                        });
+                        setSelectedProductId(prod.id);
+                      }}
                       className={`w-full py-3 rounded-full text-[12px] tracking-[0.15em] uppercase font-medium transition-all duration-300 cursor-pointer text-center ${
                         prod.isBundle
                           ? 'bg-[#c5a059] text-black hover:bg-[#d4b06a] shadow-[0_0_20px_rgba(197,160,89,0.2)]'
@@ -658,7 +667,7 @@ export default function App() {
           <div className="md:w-1/2 flex flex-col justify-between p-10 sm:p-16">
             <div>
               <div className="flex items-center gap-2.5 mb-8">
-                <ConnectAILabLogo size={18} className="text-white/70" />
+                <ArcanaSealLogo size={18} className="text-white/70" />
                 <span className="text-[15px] font-medium text-white/70 tracking-tight">
                   {currentConfig.brandName}
                 </span>

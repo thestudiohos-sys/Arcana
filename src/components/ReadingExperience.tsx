@@ -39,7 +39,6 @@ function PremiumReadingResultView({
 }: PremiumReadingResultViewProps) {
   const isKo = language === 'ko';
   const {
-    readingId,
     cards,
     connectionHeadline,
     cardConnection,
@@ -51,6 +50,8 @@ function PremiumReadingResultView({
     closingMessage,
     disclaimer,
   } = result;
+
+  const pDict = DICTIONARY[language].premiumExperience.resultView;
 
   return (
     <motion.div
@@ -65,22 +66,19 @@ function PremiumReadingResultView({
           <div className="flex items-center gap-2 mb-1">
             <span className="text-[#c5a059] text-[11px]">✦✦✦</span>
             <span className="text-[#c5a059] text-[11px] sm:text-[12px] tracking-[0.25em] uppercase font-medium">
-              {isKo ? '3장 심층 아르카나 리딩' : '3-CARD DEEP ARCANA READING'}
+              {pDict.eyebrow}
             </span>
           </div>
-          <span className="text-white/40 text-[11px] font-mono">
-            ID: {readingId}
-          </span>
         </div>
         <div className="px-3 py-1 rounded-full border border-[#c5a059]/30 bg-[#c5a059]/[0.05] text-[#c5a059] text-[11px] tracking-wider uppercase font-medium">
-          {isKo ? '심층 개인화 분석' : 'DEEP PERSONALIZED ANALYTICS'}
+          {pDict.badge}
         </div>
       </div>
 
       {/* ── 3-CARD VISUAL SPREAD HEADER ── */}
       <div className="mb-10">
         <h4 className="text-[#c5a059] text-[11px] tracking-[0.25em] uppercase font-medium mb-4 text-center sm:text-left">
-          ✦ {isKo ? '선택한 세 장의 카드' : 'YOUR THREE REVEALED CARDS'}
+          ✦ {pDict.cardsHeadline}
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {cards.map((item) => (
@@ -113,7 +111,7 @@ function PremiumReadingResultView({
       {/* ── INDIVIDUAL CARD INTERPRETATIONS ── */}
       <div className="space-y-6 mb-10 border-b border-white/10 pb-10">
         <h4 className="text-[#c5a059] text-[11px] tracking-[0.25em] uppercase font-medium mb-2">
-          ✦ {isKo ? '각 카드의 상세 역할과 의미' : 'INDIVIDUAL CARD ROLES & MEANINGS'}
+          ✦ {pDict.rolesHeadline}
         </h4>
         {cards.map((item) => (
           <div
@@ -195,7 +193,7 @@ function PremiumReadingResultView({
       {/* ── 3 PRACTICAL REAL-WORLD ACTIONS ── */}
       <div className="my-10 p-6 rounded-xl border border-[#c5a059]/30 bg-[#c5a059]/[0.03]">
         <h4 className="text-[#c5a059] text-[11px] tracking-[0.25em] uppercase font-medium mb-4 text-center sm:text-left">
-          ✦ {isKo ? '당신을 위한 3가지 현실적 행동 제안' : 'THREE PRACTICAL STEPS TO TAKE'}
+          ✦ {pDict.actionsHeadline}
         </h4>
         <ol className="space-y-3 text-left">
           {actions.map((act, idx) => (
@@ -231,12 +229,12 @@ function PremiumReadingResultView({
           onClick={onReSelectThreeCards}
           className="w-full sm:w-auto px-6 py-3 rounded-full border border-[#c5a059] bg-[#c5a059]/10 text-[#c5a059] hover:bg-[#c5a059] hover:text-black transition-all duration-300 text-[12px] tracking-[0.2em] uppercase font-medium text-center cursor-pointer"
         >
-          {isKo ? '세 장 다시 펼치기' : 'CHOOSE THREE CARDS AGAIN'}
+          {pDict.reSelectThreeCta}
         </button>
         <button
           type="button"
           onClick={onStartOver}
-          className="w-full sm:w-auto px-6 py-3 rounded-full border border-white/20 bg-transparent text-white/60 hover:border-white/40 hover:text-white transition-all duration-300 text-[12px] tracking-[0.2em] uppercase font-medium text-center cursor-pointer"
+          className="w-full sm:w-auto px-6 py-3 rounded-full border border-[#ffffff]/20 bg-transparent text-white/60 hover:border-white/40 hover:text-white transition-all duration-300 text-[12px] tracking-[0.2em] uppercase font-medium text-center cursor-pointer"
         >
           {isKo ? '처음부터 다시' : 'START OVER'}
         </button>
@@ -394,7 +392,7 @@ function PremiumReadingView({
               {dict.contextSummaryTitle}
             </span>
             <span className="text-white/40 text-[10px] uppercase font-mono">
-              {selectedEntryType}
+              {selectedEntryType ? ((DICTIONARY[language].reading.topics as Record<string, string>)[selectedEntryType] || selectedEntryType) : ''}
             </span>
           </div>
           <p className="text-white/80 text-[13px] font-light line-clamp-2 italic">
@@ -424,7 +422,7 @@ function PremiumReadingView({
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-[#c5a059] text-[11px] tracking-[0.2em] uppercase font-medium">
-                        CARD {step.stepNumber}
+                        {language === 'ko' ? `카드 ${step.stepNumber}` : `CARD ${step.stepNumber}`}
                       </span>
                       {selectedCardData && (
                         <span className="text-[#c5a059] text-[12px]">✦</span>
@@ -451,7 +449,7 @@ function PremiumReadingView({
                       </div>
                     ) : (
                       <span className="text-white/30 text-[11px] font-light italic">
-                        {isCurrentStepSlot ? `← ${dict.choosePrompt.replace('{{role}}', step.roleName)}` : 'Empty Slot'}
+                        {isCurrentStepSlot ? `← ${dict.choosePrompt.replace('{{role}}', step.roleName)}` : language === 'ko' ? '아직 선택하지 않았습니다' : 'Empty Slot'}
                       </span>
                     )}
                   </div>
@@ -608,7 +606,7 @@ function PremiumReadingView({
                 disabled={isLoadingResult}
                 className="text-white/40 hover:text-white/80 text-[12px] tracking-wider transition-colors cursor-pointer disabled:opacity-40"
               >
-                Re-select All 3 Cards
+                {language === 'ko' ? '세 장 모두 다시 선택' : 'Re-select All 3 Cards'}
               </button>
             </div>
           </div>

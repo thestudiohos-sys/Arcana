@@ -25,10 +25,10 @@ export const SITE_CONFIG = {
 
   // 성능 지표 섹션
   metrics: {
-    subtitle: 'EXPERIENCE METRICS',
+    subtitle: 'INSIDE ARCANA',
     items: [
-      { value: '78', label: 'TAROT ARCHETYPES' },
-      { value: '1', label: 'INTUITIVE CHOICE' },
+      { value: '1', label: 'YOUR STORY' },
+      { value: '3', label: 'WAYS TO GO DEEPER' },
       { value: '∞', label: 'POSSIBLE STORIES' },
     ],
   },
@@ -52,8 +52,8 @@ export const SITE_CONFIG = {
         desc: 'Connect the reading with the question or story already on your mind.',
       },
       {
-        title: 'ARCANA RITUAL',
-        desc: 'Turn a simple card draw into a quiet moment of focus and intention.',
+        title: 'A QUIET MOMENT',
+        desc: 'Before choosing a card, take a quiet moment to notice what is still on your mind.',
       },
     ],
   },

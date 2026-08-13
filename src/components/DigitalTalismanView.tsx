@@ -54,7 +54,7 @@ export function DigitalTalismanView({
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#c5a059]/40 bg-[#c5a059]/[0.06] mb-4">
           <span className="text-[#c5a059] text-[11px]">✦</span>
           <span className="text-[#c5a059] text-[11px] sm:text-[12px] tracking-[0.25em] uppercase font-medium">
-            {isKo ? '나만의 디지털 부적' : 'PERSONALIZED DIGITAL TALISMAN'}
+            {isKo ? '나만의 디지털 부적' : 'Personalized Digital Talisman'}
           </span>
         </div>
         <h2 className="text-white text-[24px] sm:text-[34px] font-light leading-snug tracking-[-0.01em] mb-3">
@@ -62,8 +62,8 @@ export function DigitalTalismanView({
         </h2>
         <p className="text-white/60 text-[13px] sm:text-[15px] leading-relaxed max-w-lg mx-auto font-light">
           {isKo
-            ? '당신이 적은 이야기와 선택한 카드의 상징을 결합하여 로컬로 구성한 부적입니다. 마음에 가장 강하게 와닿는 부적 1종을 선택해 간직해보세요.'
-            : 'Formed from the symbolism of your story and cards. Select the single talisman that speaks most strongly to you.'}
+            ? '당신이 적은 이야기와 선택한 카드의 상징에서 영감을 받아 만든 디지털 부적입니다. 세 가지 중 가장 마음에 와닿는 하나를 선택해 간직해보세요.'
+            : 'Inspired by the symbolism of your story and cards. Choose the one that speaks most strongly to you.'}
         </p>
       </div>
 
@@ -73,18 +73,18 @@ export function DigitalTalismanView({
           ✦{' '}
           {hasPremiumCards
             ? isKo
-              ? '세 장의 카드와 당신의 이야기를 바탕으로 구성했습니다.'
-              : 'Built from your story and three-card spread.'
+              ? '당신의 이야기와 세 장의 카드에서 이어진 부적입니다.'
+              : 'Inspired by your story and three-card spread.'
             : isKo
-              ? '당신의 이야기와 선택한 카드를 바탕으로 구성했습니다.'
-              : 'Built from your story and selected card.'}
+              ? '당신의 이야기와 선택한 카드에서 이어진 부적입니다.'
+              : 'Inspired by your story and selected card.'}
         </p>
       </div>
 
       {/* ── 3 CANDIDATE OPTIONS GRID (COMPARISON & SINGLE SELECTION) ── */}
       <div className="mb-12">
         <h3 className="text-[#c5a059] text-[12px] tracking-[0.25em] uppercase font-medium mb-6 text-center sm:text-left">
-          ✦ {isKo ? '부적 후보 3종 비교 및 선택' : 'COMPARE & CHOOSE 1 OF 3 CANDIDATES'}
+          ✦ {isKo ? '마음에 와닿는 부적을 골라보세요' : 'CHOOSE THE ONE THAT SPEAKS TO YOU'}
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -122,7 +122,7 @@ export function DigitalTalismanView({
 
                   {/* Title & Subtitle */}
                   <span className="text-[#c5a059] text-[10px] tracking-[0.2em] uppercase font-medium block mb-1">
-                    CANDIDATE {idx + 1}
+                    {isKo ? `부적 ${idx + 1}` : `TALISMAN ${idx + 1}`}
                   </span>
                   <h4 className="text-white text-[16px] font-medium mb-1">
                     {isKo ? opt.titleKo : opt.titleEn}
@@ -169,7 +169,7 @@ export function DigitalTalismanView({
       <div className="my-12 pt-10 border-t border-white/10">
         <div className="mb-6">
           <span className="text-[#c5a059] text-[11px] tracking-[0.25em] uppercase font-medium block mb-1">
-            ✦ {isKo ? '선택된 디지털 부적 대형 확대보기' : 'SELECTED TALISMAN HIGH-RES PREVIEW'}
+            ✦ {isKo ? '당신이 선택한 부적' : 'YOUR SELECTED TALISMAN'}
           </span>
           <h3 className="text-white text-[20px] sm:text-[24px] font-light">
             {isKo ? selectedOption.titleKo : selectedOption.titleEn}
@@ -198,7 +198,7 @@ export function DigitalTalismanView({
             onClick={handleDownloadSvg}
             className="w-full sm:w-auto px-8 py-3.5 rounded-full border border-[#c5a059] bg-[#c5a059] text-black hover:bg-[#d4b06a] transition-all duration-300 text-[12px] tracking-[0.2em] uppercase font-medium shadow-[0_0_20px_rgba(197,160,89,0.3)] cursor-pointer flex items-center justify-center gap-2"
           >
-            <span>↓</span> {isKo ? 'SVG로 저장' : 'SAVE AS SVG'}
+            <span>↓</span> {isKo ? 'SVG 파일로 저장' : 'SAVE AS SVG'}
           </button>
         </div>
       </div>

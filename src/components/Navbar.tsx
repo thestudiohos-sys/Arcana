@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ConnectAILabLogo } from './ConnectAILabLogo';
+import { ArcanaSealLogo } from './ArcanaSealLogo';
 import { SquashHamburger } from './SquashHamburger';
 import { ScrambleText } from './ScrambleText';
 import { AuthModal } from './AuthModal';
@@ -16,17 +16,21 @@ interface NavbarProps {
 
 export function Navbar({ entranceComplete, language, setLanguage }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [downloadHovered, setDownloadHovered] = useState(false);
   const [aboutHovered, setAboutHovered] = useState(false);
-  const [metricsHovered, setMetricsHovered] = useState(false);
+  const [readingHovered, setReadingHovered] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const { user, signOut } = useAuth();
 
   const t = DICTIONARY[language].nav;
 
-  const scrollTo = (y: number) => {
-    window.scrollTo({ top: y, behavior: 'smooth' });
+  const scrollToSection = (sectionId: string) => {
     setMenuOpen(false);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -43,13 +47,14 @@ export function Navbar({ entranceComplete, language, setLanguage }: NavbarProps)
           <div className="flex items-center gap-2">
             {/* Logo pill */}
             <motion.div
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className={`h-12 px-5 bg-white/15 backdrop-blur-md rounded-[14px] flex items-center gap-2.5 cursor-pointer ${
                 menuOpen ? 'hidden md:flex' : 'flex'
               }`}
               whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.22)' }}
               whileTap={{ scale: 0.98 }}
             >
-              <ConnectAILabLogo size={18} className="text-white" />
+              <ArcanaSealLogo size={18} className="text-white" />
               <span className="text-[16px] font-medium tracking-tight text-white">
                 {DICTIONARY[language].brandName}
               </span>
@@ -91,17 +96,17 @@ export function Navbar({ entranceComplete, language, setLanguage }: NavbarProps)
                       className="text-[16px] font-normal text-white/85 hover:text-white transition-colors cursor-pointer bg-transparent border-none"
                       onMouseEnter={() => setAboutHovered(true)}
                       onMouseLeave={() => setAboutHovered(false)}
-                      onClick={() => scrollTo(window.innerHeight)}
+                      onClick={() => scrollToSection(t.links[0].sectionId)}
                     >
                       <ScrambleText text={t.links[0].label} isHovered={aboutHovered} />
                     </button>
                     <button
                       className="text-[16px] font-normal text-white/85 hover:text-white transition-colors cursor-pointer bg-transparent border-none"
-                      onMouseEnter={() => setMetricsHovered(true)}
-                      onMouseLeave={() => setMetricsHovered(false)}
-                      onClick={() => scrollTo(window.innerHeight * 2)}
+                      onMouseEnter={() => setReadingHovered(true)}
+                      onMouseLeave={() => setReadingHovered(false)}
+                      onClick={() => scrollToSection(t.links[1].sectionId)}
                     >
-                      <ScrambleText text={t.links[1].label} isHovered={metricsHovered} />
+                      <ScrambleText text={t.links[1].label} isHovered={readingHovered} />
                     </button>
                   </motion.div>
                 )}
@@ -153,13 +158,13 @@ export function Navbar({ entranceComplete, language, setLanguage }: NavbarProps)
                     </div>
                   )}
                   <span className="text-[14px] text-white/80 max-w-[120px] truncate">
-                    {user.displayName || user.email?.split('@')[0] || 'User'}
+                    {user.displayName || user.email?.split('@')[0] || t.defaultUser}
                   </span>
                   <button
                     onClick={signOut}
                     className="text-[12px] text-white/40 hover:text-white/80 transition-colors cursor-pointer bg-transparent border-none ml-1"
                   >
-                    Sign Out
+                    {t.signOut}
                   </button>
                 </div>
               </div>
@@ -172,20 +177,6 @@ export function Navbar({ entranceComplete, language, setLanguage }: NavbarProps)
                 {t.signIn}
               </motion.button>
             )}
-
-            {/* Download button */}
-            <motion.button
-              className="h-12 px-6 bg-white rounded-full flex items-center gap-2.5 cursor-pointer border-none"
-              whileHover={{ scale: 1.03, backgroundColor: '#e2e2e6' }}
-              whileTap={{ scale: 0.97 }}
-              onMouseEnter={() => setDownloadHovered(true)}
-              onMouseLeave={() => setDownloadHovered(false)}
-            >
-              <i className="bi bi-apple text-black text-[16px]" />
-              <span className="text-black text-[16px] font-medium">
-                <ScrambleText text={t.downloadLabel} isHovered={downloadHovered} />
-              </span>
-            </motion.button>
           </div>
         </div>
 
@@ -195,11 +186,12 @@ export function Navbar({ entranceComplete, language, setLanguage }: NavbarProps)
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             {/* Logo pill */}
             <motion.div
-              className="h-9 px-3 bg-white/15 backdrop-blur-md rounded-[10px] flex items-center gap-2 overflow-hidden shrink-0"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="h-9 px-3 bg-white/15 backdrop-blur-md rounded-[10px] flex items-center gap-2 overflow-hidden shrink-0 cursor-pointer"
               animate={{ width: menuOpen ? 0 : 'auto', opacity: menuOpen ? 0 : 1, paddingLeft: menuOpen ? 0 : 12, paddingRight: menuOpen ? 0 : 12 }}
               transition={{ type: 'spring', stiffness: 350, damping: 28 }}
             >
-              <ConnectAILabLogo size={14} className="text-white shrink-0" />
+              <ArcanaSealLogo size={14} className="text-white shrink-0" />
               <span className="text-[13px] font-medium tracking-tight text-white whitespace-nowrap">
                 {DICTIONARY[language].brandName}
               </span>
@@ -236,13 +228,13 @@ export function Navbar({ entranceComplete, language, setLanguage }: NavbarProps)
                   >
                     <button
                       className="text-[13px] font-normal text-white/85 cursor-pointer bg-transparent border-none"
-                      onClick={() => scrollTo(window.innerHeight)}
+                      onClick={() => scrollToSection(t.links[0].sectionId)}
                     >
                       {t.links[0].label}
                     </button>
                     <button
                       className="text-[13px] font-normal text-white/85 cursor-pointer bg-transparent border-none"
-                      onClick={() => scrollTo(window.innerHeight * 2)}
+                      onClick={() => scrollToSection(t.links[1].sectionId)}
                     >
                       {t.links[1].label}
                     </button>
@@ -286,6 +278,7 @@ export function Navbar({ entranceComplete, language, setLanguage }: NavbarProps)
                 className="h-9 w-9 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center cursor-pointer border-none overflow-hidden"
                 whileTap={{ scale: 0.9 }}
                 onClick={signOut}
+                title={t.signOut}
               >
                 {user.photoURL ? (
                   <img src={user.photoURL} alt="" className="w-full h-full object-cover" />
@@ -304,17 +297,6 @@ export function Navbar({ entranceComplete, language, setLanguage }: NavbarProps)
                 {t.signIn}
               </motion.button>
             )}
-
-            {/* Download button */}
-            <motion.button
-              className="h-9 px-3.5 bg-white rounded-full flex items-center gap-1.5 cursor-pointer border-none"
-              whileTap={{ scale: 0.95 }}
-            >
-              <i className="bi bi-apple text-black text-[13px]" />
-              <span className="text-black text-[13px] font-medium">
-                {t.downloadLabel}
-              </span>
-            </motion.button>
           </div>
         </div>
       </motion.nav>

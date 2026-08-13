@@ -7,16 +7,16 @@ export const DICTIONARY = {
       titleRight: ['REVEAL', 'THE ARCANA'],
       watermark: 'ARCANA',
       description:
-        'Choose the card your intuition is drawn to and discover the story waiting beneath the surface.',
+        'Share a dream, concern, wish, relationship, or feeling that stayed with you. ARCANA connects your story with the card you choose to create a personalized symbolic reading.',
     },
     cinematic: {
       text: 'Not every answer arrives as logic. Some appear as symbols. Some as feelings. Some as a single card you cannot ignore.',
     },
     metrics: {
-      subtitle: 'EXPERIENCE METRICS',
+      subtitle: 'INSIDE ARCANA',
       items: [
-        { value: '78', label: 'TAROT ARCHETYPES' },
-        { value: '1', label: 'INTUITIVE CHOICE' },
+        { value: '1', label: 'YOUR STORY' },
+        { value: '3', label: 'WAYS TO GO DEEPER' },
         { value: '∞', label: 'POSSIBLE STORIES' },
       ],
     },
@@ -38,34 +38,34 @@ export const DICTIONARY = {
           desc: 'Connect the reading with the question or story already on your mind.',
         },
         {
-          title: 'ARCANA RITUAL',
-          desc: 'Turn a simple card draw into a quiet moment of focus and intention.',
+          title: 'A QUIET MOMENT',
+          desc: 'Before choosing a card, take a quiet moment to notice what is still on your mind.',
         },
       ],
     },
     architecture: {
       subtitle: 'HOW ARCANA WORKS',
-      heading: 'FROM INTUITION\nTO INTERPRETATION',
+      heading: 'FROM STORY\nTO READING',
       description:
-        'Three simple steps turn a passing thought into a quiet moment of reflection.',
+        'Three simple steps turn what is on your mind into a personalized symbolic reading.',
       layers: [
         {
           step: 'STEP 01',
-          title: 'YOUR QUESTION',
-          description: 'Bring the thought, feeling, or situation that is already on your mind.',
-          supportingText: 'Love, career, relationships, uncertainty, or a question you cannot quite put into words.',
+          title: 'YOUR STORY',
+          description: 'Share the dream, concern, wish, relationship, or feeling that has stayed with you.',
+          supportingText: 'You do not need a perfect question. Start with whatever feels most present.',
         },
         {
           step: 'STEP 02',
           title: 'YOUR CARD',
-          description: 'Let intuition guide you toward the card that naturally captures your attention.',
-          supportingText: 'No complicated rules. No right or wrong choice. Simply notice where your attention goes.',
+          description: 'Take a quiet moment and choose the card your attention naturally returns to.',
+          supportingText: 'There is no right or wrong choice. Simply notice where your attention goes.',
         },
         {
           step: 'STEP 03',
           title: 'YOUR READING',
-          description: 'Discover a symbolic interpretation shaped around your question and selected card.',
-          supportingText: 'A reflective reading designed to help you notice patterns, emotions, and possibilities.',
+          description: 'Discover a personalized interpretation connecting your story with the symbolism of your card.',
+          supportingText: 'A reflective reading designed to help you notice emotions, patterns, and possibilities.',
         },
       ],
     },
@@ -105,9 +105,9 @@ export const DICTIONARY = {
         'Tell us briefly what happened, what you dreamed, or what has been on your mind...',
       quietMomentCta: 'Take a Quiet Moment',
       quietMomentSub: {
-        blessing: 'Hold the positive feeling you just described in your mind for a moment.\nTake one slow breath, then let your attention guide you to a card.',
-        release: 'Notice the uneasy or heavy feeling you just described.\nTake one slow breath as you set it down, then let your attention guide you to a card.',
-        reflection: 'Hold what you just wrote in your mind for a moment.\nTake one slow breath, then let your attention guide you to a card.',
+        blessing: 'Hold the positive feeling for a moment. When you\'re ready, continue to your card.',
+        release: 'Set the heavy feeling down for a moment. When you\'re ready, continue to your card.',
+        reflection: 'Hold what you wrote in mind for a moment. When you\'re ready, continue to your card.',
       },
       ritual: {
         blessing: {
@@ -139,9 +139,9 @@ export const DICTIONARY = {
     },
     pricing: {
       subtitle: 'GO DEEPER',
-      heading: 'CHOOSE ONLY WHAT YOU WANT',
+      heading: 'CONTINUE YOUR WAY',
       description:
-        'Your free reading is already complete. Continue only with the experiences you want to explore further.',
+        'Your free reading is already complete. Continue only with the experiences you\'d like to explore further.',
       freeBoundaryNotice: 'Your complete 1-card reading remains free.',
     },
     footer: {
@@ -149,11 +149,12 @@ export const DICTIONARY = {
     },
     nav: {
       links: [
-        { label: 'Arcana', scrollMultiplier: 1 },
-        { label: 'Experience', scrollMultiplier: 2 },
+        { label: 'About Arcana', sectionId: 'about' },
+        { label: 'Start Reading', sectionId: 'reading' },
       ],
       signIn: 'Sign In',
-      downloadLabel: 'Download',
+      signOut: 'Sign Out',
+      defaultUser: 'User',
     },
     resultView: {
       eyebrow: 'YOUR ARCANA READING',
@@ -162,32 +163,34 @@ export const DICTIONARY = {
       signals: 'SIGNALS TO NOTICE',
       action: 'RECOMMENDED REFLECTION',
       closingTitle: 'MESSAGE TO CARRY FORWARD',
-      drawAgain: 'DRAW ANOTHER CARD',
+      drawAgain: 'CHOOSE ANOTHER CARD',
       startOver: 'START OVER',
       premiumPreview: {
         eyebrow: 'CONTINUE',
-        headline: 'GO DEEPER, IF YOU WISH',
-        body: 'Your free reading is complete. If you want to explore this moment more deeply, you can continue with one of the options below.',
-        cta: 'Try 3 Cards',
-        statusBadge: 'PREVIEW',
+        headline: 'GO DEEPER, IF YOU\'D LIKE',
+        body: 'Your free reading is complete. If you\'d like to explore this moment further, continue with any experience below.',
+        statusBadge: 'OPTIONAL',
         items: {
           deepReading: {
             title: '3-Card Deep Reading',
             desc: 'Explore the current flow, hidden meaning, and what to carry forward.',
+            cta: 'Continue with 3 Cards',
           },
           luckyNumbers: {
             title: 'Symbolic Lucky Numbers',
-            desc: 'A symbolic set of numbers inspired by your reading, for entertainment use.',
+            desc: 'A symbolic set of numbers inspired by your story and selected card.',
+            cta: 'Reveal My Numbers',
           },
           digitalTalisman: {
             title: 'Personalized Digital Talisman',
-            desc: 'Choose one symbolic talisman from three visual options.',
+            desc: 'Choose one symbolic visual from three designs inspired by your story.',
+            cta: 'Explore My Talismans',
           },
         },
       },
     },
     premiumExperience: {
-      eyebrow: '3-CARD DEEP READING',
+      eyebrow: '3장 심층 리딩',
       headline: 'REVEAL YOUR\nTHREE CARDS',
       subhead: 'Select three cards in sequence to explore your story through three complementary roles.',
       contextSummaryTitle: 'YOUR CONTINUED STORY',
@@ -212,13 +215,21 @@ export const DICTIONARY = {
         },
       ],
       progressText: 'Card {{step}} of 3',
-      choosePrompt: 'Select your card for {{role}}',
+      choosePrompt: 'Choose a card for {{role}}',
       backCta: 'Choose Previous Card Again',
       completedTitle: 'Your three cards are revealed.',
       completedSubhead: 'You are ready to explore the story they form together.',
       viewReadingCta: 'View My 3-Card Reading',
       placeholderNotice: 'Your 3-card reading result will be connected in the next step.',
       returnToFreeCta: 'Back to Single Card Reading',
+      resultView: {
+        eyebrow: '3-CARD DEEP READING',
+        badge: 'PERSONALIZED DEEP READING',
+        cardsHeadline: 'YOUR THREE REVEALED CARDS',
+        rolesHeadline: 'WHAT EACH CARD REVEALS',
+        actionsHeadline: 'THREE PRACTICAL NEXT STEPS',
+        reSelectThreeCta: 'CHOOSE THREE CARDS AGAIN',
+      },
     },
   },
   ko: {
@@ -229,17 +240,17 @@ export const DICTIONARY = {
       titleRight: ['아르카나를', '마주하세요'],
       watermark: 'ARCANA',
       description:
-        '당신의 시선이 머무는 한 장의 카드를 고르고, 그 안에 숨겨진 이야기를 만나보세요.',
+        '꿈, 고민, 소망, 관계처럼 마음에 남아 있는 이야기를 적어보세요. 당신의 이야기와 선택한 카드를 연결해 하나의 개인화된 상징 리딩을 만나볼 수 있습니다.',
     },
     cinematic: {
       text: '모든 답이 논리로 찾아오는 것은 아닙니다. 어떤 답은 상징으로, 어떤 답은 감정으로, 그리고 어떤 답은 외면할 수 없는 한 장의 카드로 나타납니다.',
     },
     metrics: {
-      subtitle: '체험 지표',
+      subtitle: '아르카나의 세계',
       items: [
-        { value: '78', label: '타로의 원형' },
-        { value: '1', label: '직관의 선택' },
-        { value: '∞', label: '무한한 이야기' },
+        { value: '1', label: '당신의 이야기' },
+        { value: '3', label: '더 깊이 보는 방법' },
+        { value: '∞', label: '이어질 수 있는 이야기' },
       ],
     },
     technology: {
@@ -260,34 +271,34 @@ export const DICTIONARY = {
           desc: '당신의 질문과 이야기를 카드의 의미와 연결해보세요.',
         },
         {
-          title: '아르카나 리추얼',
-          desc: '한 장의 카드 선택을 조용한 집중과 의도의 시간으로 바꿔보세요.',
+          title: '잠시 마음 가다듬기',
+          desc: '카드를 고르기 전, 잠시 숨을 고르고 지금 마음에 남아 있는 것을 바라봅니다.',
         },
       ],
     },
     architecture: {
       subtitle: '아르카나는 이렇게 시작됩니다',
-      heading: '직관에서\n해석으로',
+      heading: '이야기에서\n리딩으로',
       description:
-        '스쳐 지나가던 생각이 세 단계를 거쳐 조용한 성찰의 시간이 됩니다.',
+        '마음에 남아 있던 이야기가 세 단계를 거쳐 하나의 개인화된 리딩으로 이어집니다.',
       layers: [
         {
           step: 'STEP 01',
-          title: '당신의 질문',
-          description: '지금 마음에 머물러 있는 생각, 감정, 상황을 떠올려보세요.',
-          supportingText: '사랑, 일, 관계, 불확실함, 혹은 아직 말로 다 표현하지 못한 고민도 좋습니다.',
+          title: '당신의 이야기',
+          description: '꿈, 고민, 소망, 관계처럼 지금 마음에 남아 있는 것을 짧게 적어보세요.',
+          supportingText: '정답을 찾으려 애쓰지 않아도 괜찮습니다. 지금 가장 마음에 남아 있는 이야기면 충분합니다.',
         },
         {
           step: 'STEP 02',
           title: '당신의 카드',
-          description: '당신의 시선을 자연스럽게 끌어당기는 카드에 직관을 맡겨보세요.',
-          supportingText: '복잡한 규칙도, 정답도 없습니다. 그저 어디에 마음이 머무는지 바라보세요.',
+          description: '잠시 마음을 가다듬고, 자연스럽게 시선이 머무는 카드를 골라보세요.',
+          supportingText: '복잡한 규칙도 정답도 없습니다. 가장 먼저 마음이 향하는 카드를 선택하세요.',
         },
         {
           step: 'STEP 03',
           title: '당신의 리딩',
-          description: '당신의 질문과 선택한 카드가 만나 만들어내는 상징적 해석을 확인하세요.',
-          supportingText: '패턴, 감정, 가능성을 바라볼 수 있도록 돕는 성찰형 리딩입니다.',
+          description: '당신의 이야기와 카드의 상징을 연결한 개인화된 해석을 만나보세요.',
+          supportingText: '감정, 패턴, 가능성을 조금 다른 시선으로 바라볼 수 있도록 돕는 성찰형 리딩입니다.',
         },
       ],
     },
@@ -327,9 +338,9 @@ export const DICTIONARY = {
         '꿈에서 본 장면이나 요즘 마음에 걸리는 일, 바라는 일을 짧게 적어주세요...',
       quietMomentCta: '잠시 마음 가다듬기',
       quietMomentSub: {
-        blessing: '방금 적은 좋은 흐름을 잠시 마음에 담아보세요.\n천천히 숨을 한 번 고르고, 준비가 되면 카드를 만나보세요.',
-        release: '방금 적은 무거운 마음을 잠시 내려놓아보세요.\n천천히 숨을 한 번 고르고, 준비가 되면 카드를 만나보세요.',
-        reflection: '방금 적은 상황을 잠시 차분하게 바라보세요.\n천천히 숨을 한 번 고르고, 준비가 되면 카드를 만나보세요.',
+        blessing: '좋은 흐름을 잠시 마음에 담아두세요. 준비가 되면 카드를 만나보세요.',
+        release: '무거운 마음을 잠시 내려놓아보세요. 준비가 되면 카드를 만나보세요.',
+        reflection: '방금 적은 상황을 잠시 차분하게 바라보세요. 준비가 되면 카드를 만나보세요.',
       },
       ritual: {
         blessing: {
@@ -361,7 +372,7 @@ export const DICTIONARY = {
     },
     pricing: {
       subtitle: '더 깊이 이어가기',
-      heading: '원하는 만큼만 선택하세요',
+      heading: '원하는 경험만 이어가세요',
       description:
         '무료 리딩은 이미 완성되었습니다. 더 깊이 보고 싶은 경험만 골라 이어갈 수 있습니다.',
       freeBoundaryNotice: '무료 1장 리딩은 계속 무료로 이용할 수 있습니다.',
@@ -371,11 +382,12 @@ export const DICTIONARY = {
     },
     nav: {
       links: [
-        { label: '아르카나', scrollMultiplier: 1 },
-        { label: '체험하기', scrollMultiplier: 2 },
+        { label: '아르카나 소개', sectionId: 'about' },
+        { label: '리딩 시작', sectionId: 'reading' },
       ],
       signIn: '로그인',
-      downloadLabel: '다운로드',
+      signOut: '로그아웃',
+      defaultUser: '사용자',
     },
     resultView: {
       eyebrow: '당신의 아르카나 리딩',
@@ -384,26 +396,28 @@ export const DICTIONARY = {
       signals: '주목할 신호',
       action: '다음 단계',
       closingTitle: '오늘 가져갈 한 문장',
-      drawAgain: '다른 카드 뽑기',
+      drawAgain: '카드 다시 선택하기',
       startOver: '처음부터 다시',
       premiumPreview: {
-        eyebrow: '조금 더 이어가기',
+        eyebrow: '더 깊이 이어가기',
         headline: '원한다면, 조금 더 깊이 들여다보세요',
-        body: '무료 리딩은 여기서 완성됩니다. 더 깊이 살펴보고 싶다면 아래의 추가 경험으로 이어갈 수 있습니다.',
-        cta: '3장 펼쳐보기',
-        statusBadge: '미리 체험',
+        body: '무료 리딩은 여기서 완성됩니다. 더 깊이 살펴보고 싶다면 원하는 경험으로 이어갈 수 있습니다.',
+        statusBadge: '추가 경험',
         items: {
           deepReading: {
             title: '3장 심층 리딩',
-            desc: '지금의 흐름, 숨겨진 의미, 앞으로 가져갈 메시지를 3장의 카드로 더 깊게 살펴봅니다.',
+            desc: '지금의 흐름, 숨겨진 의미, 앞으로 가져갈 메시지를 세 장의 카드로 더 깊게 살펴봅니다.',
+            cta: '3장 리딩 이어가기',
           },
           luckyNumbers: {
             title: '나만의 행운 숫자',
-            desc: '당신의 리딩에서 영감을 받아 만든 상징적인 숫자 세트입니다. 가볍게 즐기는 엔터테인먼트용 기능입니다.',
+            desc: '당신의 이야기와 카드 선택에서 영감을 받아 만든 상징적인 여섯 숫자입니다.',
+            cta: '행운 숫자 보기',
           },
           digitalTalisman: {
             title: '나만의 디지털 부적',
-            desc: '당신의 리딩을 바탕으로 만든 3개의 디지털 부적 중 마음에 드는 하나를 선택할 수 있습니다.',
+            desc: '당신의 이야기와 카드에서 영감을 받아 만든 3개의 디지털 부적 중 하나를 선택할 수 있습니다.',
+            cta: '디지털 부적 만나보기',
           },
         },
       },
@@ -416,31 +430,39 @@ export const DICTIONARY = {
       steps: [
         {
           stepNumber: 1,
-          roleTitle: 'Card 1 of 3 · 지금의 흐름',
+          roleTitle: '1/3 · 지금의 흐름',
           roleName: '지금의 흐름',
           description: '지금 당신의 상황에서 가장 크게 드러나는 흐름을 살펴봅니다.',
         },
         {
           stepNumber: 2,
-          roleTitle: 'Card 2 of 3 · 숨겨진 의미',
+          roleTitle: '2/3 · 숨겨진 의미',
           roleName: '숨겨진 의미',
           description: '겉으로 바로 보이지 않는 감정이나 관점을 살펴봅니다.',
         },
         {
           stepNumber: 3,
-          roleTitle: 'Card 3 of 3 · 앞으로 가져갈 메시지',
+          roleTitle: '3/3 · 앞으로 가져갈 메시지',
           roleName: '앞으로 가져갈 메시지',
           description: '이 경험에서 앞으로 마음에 가져갈 메시지를 살펴봅니다.',
         },
       ],
       progressText: '3장 중 {{step}}번째 카드 선택',
-      choosePrompt: '{{role}}을(를) 나타낼 카드를 선택하세요',
+      choosePrompt: "'{{role}}'을 위한 카드를 선택하세요",
       backCta: '이전 카드 다시 선택',
       completedTitle: '세 장이 모두 펼쳐졌습니다',
       completedSubhead: '이제 세 카드가 함께 보여주는 이야기를 더 깊이 살펴볼 준비가 되었습니다.',
       viewReadingCta: '3장 리딩 보기',
       placeholderNotice: '3장 리딩 결과는 다음 단계에서 연결됩니다.',
       returnToFreeCta: '무료 1장 리딩으로 돌아가기',
+      resultView: {
+        eyebrow: '3장 심층 리딩',
+        badge: '당신을 위한 심층 리딩',
+        cardsHeadline: '선택한 세 장의 카드',
+        rolesHeadline: '각 카드가 보여주는 의미',
+        actionsHeadline: '지금 해볼 수 있는 3가지',
+        reSelectThreeCta: '세 장 다시 선택하기',
+      },
     },
   },
 };

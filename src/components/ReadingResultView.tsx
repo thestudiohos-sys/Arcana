@@ -22,7 +22,6 @@ export function ReadingResultView({
   onStartDigitalTalisman,
 }: ReadingResultViewProps) {
   const {
-    readingId,
     selectedCard,
     headline,
     currentSituation,
@@ -46,11 +45,8 @@ export function ReadingResultView({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-white/10 pb-6 mb-8 gap-4">
         <div>
-          <span className="text-[#c5a059] text-[11px] sm:text-[12px] tracking-[0.25em] uppercase font-medium block mb-1">
+          <span className="text-[#c5a059] text-[11px] sm:text-[12px] tracking-[0.25em] uppercase font-medium block">
             {t.eyebrow}
-          </span>
-          <span className="text-white/40 text-[11px] font-mono">
-            ID: {readingId}
           </span>
         </div>
 
@@ -189,7 +185,7 @@ export function ReadingResultView({
                 onClick={onStartPremiumReading}
                 className="text-[#c5a059] text-[11px] sm:text-[12px] font-medium hover:underline cursor-pointer flex items-center justify-end gap-1 ml-auto"
               >
-                {preview.cta} <span>→</span>
+                {preview.items.deepReading.cta} <span>→</span>
               </button>
             </div>
           </div>
@@ -216,7 +212,7 @@ export function ReadingResultView({
                 onClick={onStartSymbolicNumbers}
                 className="text-[#c5a059] text-[11px] sm:text-[12px] font-medium hover:underline cursor-pointer flex items-center justify-end gap-1 ml-auto"
               >
-                {language === 'ko' ? '나만의 숫자 보기' : 'Reveal My Numbers'} <span>→</span>
+                {preview.items.luckyNumbers.cta} <span>→</span>
               </button>
             </div>
           </div>
@@ -243,7 +239,7 @@ export function ReadingResultView({
                 onClick={onStartDigitalTalisman}
                 className="text-[#c5a059] text-[11px] sm:text-[12px] font-medium hover:underline cursor-pointer flex items-center justify-end gap-1 ml-auto"
               >
-                {language === 'ko' ? '부적 3개 보기' : 'View My 3 Talismans'} <span>→</span>
+                {preview.items.digitalTalisman.cta} <span>→</span>
               </button>
             </div>
           </div>

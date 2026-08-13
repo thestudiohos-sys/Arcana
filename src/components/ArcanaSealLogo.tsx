@@ -1,9 +1,9 @@
-interface ConnectAILabLogoProps {
+interface ArcanaSealLogoProps {
   className?: string;
   size?: number;
 }
 
-export function ConnectAILabLogo({ className = '', size = 18 }: ConnectAILabLogoProps) {
+export function ArcanaSealLogo({ className = '', size = 18 }: ArcanaSealLogoProps) {
   return (
     <svg
       width={size}
