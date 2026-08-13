@@ -22,12 +22,20 @@ function getSessionId(): string {
   }
 }
 
+export const ANALYTICS_PROVIDER = (import.meta.env.VITE_ANALYTICS_PROVIDER || 'local').toLowerCase();
+
 export function trackPurchaseIntent(params: {
   event: PurchaseIntentEventName;
   productId: ProductId;
   language: 'ko' | 'en';
   source?: 'pricing' | 'free_result';
 }): void {
+  if (ANALYTICS_PROVIDER === 'remote') {
+    const errorMsg = 'Remote purchase intent analytics is not configured.';
+    console.error('[PurchaseIntentAnalytics]', errorMsg);
+    throw new Error(errorMsg);
+  }
+
   try {
     const product: ArcanaProduct | undefined = ARCANA_PRODUCTS[params.productId];
     const newEvent: PurchaseIntentEvent = {

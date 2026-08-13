@@ -9,6 +9,9 @@ interface ImportMetaEnv {
   readonly VITE_FIREBASE_APP_ID: string;
   readonly VITE_PAYPAL_CLIENT_ID: string;
   readonly VITE_TOSS_CLIENT_KEY: string;
+  readonly VITE_READING_PROVIDER: string;
+  readonly VITE_API_BASE_URL: string;
+  readonly VITE_ANALYTICS_PROVIDER: string;
 }
 
 interface ImportMeta {

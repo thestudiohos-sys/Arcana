@@ -8,8 +8,22 @@ import {
   RitualType,
 } from '../types/reading';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 export const READING_PROVIDER = import.meta.env.VITE_READING_PROVIDER || 'local';
+
+function getApiBaseUrl(): string {
+  const envUrl = import.meta.env.VITE_API_BASE_URL;
+  if (envUrl && envUrl.trim() !== '') {
+    return envUrl.trim();
+  }
+
+  // If in production and READING_PROVIDER is set to 'api', require explicit VITE_API_BASE_URL
+  if (import.meta.env.PROD && READING_PROVIDER === 'api') {
+    throw new Error('ARCANA API base URL is not configured for production.');
+  }
+
+  // Local development fallback
+  return 'http://127.0.0.1:8000';
+}
 
 export async function fetchFreeReadingApi(params: {
   entryType: EntryType;
@@ -18,7 +32,8 @@ export async function fetchFreeReadingApi(params: {
   selectedCardId: string;
   language: Language;
 }): Promise<ReadingResult> {
-  const res = await fetch(`${API_BASE_URL}/api/readings/free`, {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/api/readings/free`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params),
@@ -39,7 +54,8 @@ export async function fetchPremiumReadingApi(params: {
   cardIds: string[];
   language: Language;
 }): Promise<PremiumReadingResult> {
-  const res = await fetch(`${API_BASE_URL}/api/readings/premium`, {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/api/readings/premium`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params),
@@ -61,7 +77,8 @@ export async function fetchSymbolicNumbersApi(params: {
   freeCardId?: string;
   premiumCardIds?: string[];
 }): Promise<SymbolicNumberResult> {
-  const res = await fetch(`${API_BASE_URL}/api/numbers/symbolic`, {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/api/numbers/symbolic`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -86,7 +103,8 @@ export async function fetchDigitalTalismanOptionsApi(params: {
   premiumCardIds?: string[];
   language: Language;
 }): Promise<DigitalTalismanResult> {
-  const res = await fetch(`${API_BASE_URL}/api/talismans/options`, {
+  const baseUrl = getApiBaseUrl();
+  const res = await fetch(`${baseUrl}/api/talismans/options`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params),

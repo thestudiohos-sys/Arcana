@@ -8,13 +8,21 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# CORS configuration restricted to local dev server origins
-origins = [
+import os
+
+# CORS configuration with environment variable support
+default_origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+
+env_cors = os.environ.get("CORS_ALLOWED_ORIGINS", "")
+if env_cors.strip():
+    origins = [o.strip() for o in env_cors.split(",") if o.strip()]
+else:
+    origins = default_origins
 
 app.add_middleware(
     CORSMiddleware,
