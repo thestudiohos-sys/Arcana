@@ -31,20 +31,26 @@ class InMemoryRateLimiter:
 
     def check_rate_limit(self, request: Request, endpoint_type: str):
         """
-        endpoint_type: 'free' or 'premium'
-        Applies rate limit ONLY if READING_PROVIDER == 'gemini'.
+        endpoint_type: 'free', 'premium', or 'analytics'
+        Reading limits apply only in Gemini mode. Analytics has a separate,
+        always-on in-memory limit to protect the central event table.
         """
-        provider = os.environ.get("READING_PROVIDER", "mock").lower()
-        if provider != "gemini":
+        reading_provider = os.environ.get("READING_PROVIDER", "mock").lower()
+        if endpoint_type != "analytics" and reading_provider != "gemini":
             # Rate limit applies only to Gemini provider mode
             return
 
-        window_seconds = self._get_env_int("RATE_LIMIT_WINDOW_SECONDS", 600)
+        if endpoint_type == "analytics":
+            window_seconds = self._get_env_int("ANALYTICS_RATE_LIMIT_WINDOW_SECONDS", 60)
+            limit = self._get_env_int("ANALYTICS_RATE_LIMIT", 120)
+        else:
+            window_seconds = self._get_env_int("RATE_LIMIT_WINDOW_SECONDS", 600)
+
         if endpoint_type == "free":
             limit = self._get_env_int("FREE_READING_RATE_LIMIT", 10)
         elif endpoint_type == "premium":
             limit = self._get_env_int("PREMIUM_READING_RATE_LIMIT", 5)
-        else:
+        elif endpoint_type != "analytics":
             return
 
         client_ip = get_client_ip(request)

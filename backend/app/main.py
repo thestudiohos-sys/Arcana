@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import readings, numbers, talismans
+from app.routes import analytics, readings, numbers, talismans
 
 app = FastAPI(
     title="Arcana by H.O.S Local Mock API",
@@ -36,6 +36,7 @@ app.add_middleware(
 app.include_router(readings.router, prefix="/api")
 app.include_router(numbers.router, prefix="/api")
 app.include_router(talismans.router, prefix="/api")
+app.include_router(analytics.router, prefix="/api")
 
 @app.get("/api/health")
 def health_check():

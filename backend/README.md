@@ -113,3 +113,23 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
   "language": "ko"
 }
 ```
+
+### 6. Privacy-Minimized Analytics
+
+- **Endpoint**: `POST /api/analytics/events`
+- **Safe local default**: `ANALYTICS_PROVIDER=disabled`
+- **Central storage**: set `ANALYTICS_PROVIDER=supabase`, `SUPABASE_URL`, and
+  `SUPABASE_SERVICE_ROLE_KEY` in `backend/.env`.
+- **Table SQL**: run `backend/sql/analytics_events.sql` in the Supabase SQL Editor.
+
+The service-role key is used only by FastAPI. Never expose it through a `VITE_*`
+variable or commit a real `.env` file. The endpoint accepts only the seven
+whitelisted funnel events and does not accept story text, reading results, user
+identity, raw IP, User-Agent, cookies, or payment details.
+
+Run the focused backend checks without any Gemini or Supabase call:
+
+```powershell
+cd backend
+python -m unittest discover -s tests -v
+```

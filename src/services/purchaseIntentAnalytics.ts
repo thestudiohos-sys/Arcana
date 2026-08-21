@@ -1,5 +1,14 @@
 import { ProductId, ARCANA_PRODUCTS, ArcanaProduct } from '../config/products';
-import { PurchaseIntentEvent, PurchaseIntentEventName, PurchaseIntentSummary } from '../types/purchaseIntent';
+import {
+  AnalyticsEvent,
+  AnalyticsEventName,
+  AnalyticsSource,
+  ProductFunnelEventName,
+  PurchaseIntentEvent,
+  PurchaseIntentEventName,
+  PurchaseIntentSummary,
+} from '../types/purchaseIntent';
+import { sendRemoteAnalyticsEvent } from './analyticsTransport';
 
 const STORAGE_KEY = 'arcana_purchase_intent_events';
 const SESSION_KEY = 'arcana_session_id';
@@ -24,35 +33,43 @@ function getSessionId(): string {
 
 export const ANALYTICS_PROVIDER = (import.meta.env.VITE_ANALYTICS_PROVIDER || 'local').toLowerCase();
 
-export function trackPurchaseIntent(params: {
-  event: PurchaseIntentEventName;
-  productId: ProductId;
+const PURCHASE_INTENT_EVENTS = new Set<AnalyticsEventName>([
+  'premium_product_clicked',
+  'checkout_opened',
+  'payment_intent_clicked',
+  'coming_soon_viewed',
+  'launch_interest_clicked',
+]);
+
+function createEvent(params: {
+  event: AnalyticsEventName;
+  productId?: ProductId;
   language: 'ko' | 'en';
-  source?: 'pricing' | 'free_result';
-}): void {
-  if (ANALYTICS_PROVIDER === 'remote') {
-    const errorMsg = 'Remote purchase intent analytics is not configured.';
-    console.error('[PurchaseIntentAnalytics]', errorMsg);
-    throw new Error(errorMsg);
-  }
+  source: AnalyticsSource;
+  priceKRW?: number;
+  priceUSD?: number;
+}): AnalyticsEvent {
+  return {
+    id:
+      typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `evt_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    event: params.event,
+    productId: params.productId,
+    language: params.language,
+    sessionId: getSessionId(),
+    timestamp: new Date().toISOString(),
+    source: params.source,
+    priceKRW: params.priceKRW,
+    priceUSD: params.priceUSD,
+  };
+}
 
+function storeLocalEvent(newEvent: AnalyticsEvent): void {
   try {
-    const product: ArcanaProduct | undefined = ARCANA_PRODUCTS[params.productId];
-    const newEvent: PurchaseIntentEvent = {
-      id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `evt_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-      event: params.event,
-      productId: params.productId,
-      language: params.language,
-      sessionId: getSessionId(),
-      timestamp: new Date().toISOString(),
-      source: params.source || 'pricing',
-      priceKRW: product?.priceKRW,
-      priceUSD: product?.priceUSD,
-    };
-
     const storedStr = localStorage.getItem(STORAGE_KEY);
-    let events: PurchaseIntentEvent[] = storedStr ? JSON.parse(storedStr) : [];
-    
+    let events: AnalyticsEvent[] = storedStr ? JSON.parse(storedStr) : [];
+
     events.push(newEvent);
     if (events.length > MAX_EVENTS) {
       events = events.slice(events.length - MAX_EVENTS);
@@ -64,13 +81,88 @@ export function trackPurchaseIntent(params: {
   }
 }
 
-export function getPurchaseIntentEvents(): PurchaseIntentEvent[] {
+function getRemoteEndpoint(): string | null {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+  if (baseUrl) {
+    return `${baseUrl.replace(/\/$/, '')}/api/analytics/events`;
+  }
+
+  if (import.meta.env.PROD) {
+    return null;
+  }
+
+  return 'http://127.0.0.1:8000/api/analytics/events';
+}
+
+function dispatchEvent(event: AnalyticsEvent): void {
+  // Keep the existing local history in both modes. Remote mode adds central delivery
+  // without making analytics availability part of any user-facing flow.
+  storeLocalEvent(event);
+
+  if (ANALYTICS_PROVIDER !== 'remote') return;
+
+  const endpoint = getRemoteEndpoint();
+  if (!endpoint) {
+    if (import.meta.env.DEV) {
+      console.warn('[PurchaseIntentAnalytics] Remote tracking skipped: API base URL is not configured.');
+    }
+    return;
+  }
+
+  void sendRemoteAnalyticsEvent(event, {
+    endpoint,
+    warn: import.meta.env.DEV
+      ? (message) => console.warn('[PurchaseIntentAnalytics]', message)
+      : undefined,
+  });
+}
+
+export function trackPurchaseIntent(params: {
+  event: PurchaseIntentEventName;
+  productId: ProductId;
+  language: 'ko' | 'en';
+  source?: 'pricing' | 'free_result';
+}): void {
+  const product: ArcanaProduct | undefined = ARCANA_PRODUCTS[params.productId];
+  dispatchEvent(
+    createEvent({
+      event: params.event,
+      productId: params.productId,
+      language: params.language,
+      source: params.source || 'pricing',
+      priceKRW: product?.priceKRW,
+      priceUSD: product?.priceUSD,
+    }),
+  );
+}
+
+export function trackProductFunnel(params: {
+  event: ProductFunnelEventName;
+  language: 'ko' | 'en';
+}): void {
+  dispatchEvent(
+    createEvent({
+      event: params.event,
+      language: params.language,
+      source: 'free_reading',
+    }),
+  );
+}
+
+export function getAnalyticsEvents(): AnalyticsEvent[] {
   try {
     const storedStr = localStorage.getItem(STORAGE_KEY);
     return storedStr ? JSON.parse(storedStr) : [];
   } catch {
     return [];
   }
+}
+
+export function getPurchaseIntentEvents(): PurchaseIntentEvent[] {
+  return getAnalyticsEvents().filter(
+    (event): event is PurchaseIntentEvent =>
+      PURCHASE_INTENT_EVENTS.has(event.event) && event.productId !== undefined,
+  );
 }
 
 export function getPurchaseIntentSummary(): PurchaseIntentSummary {

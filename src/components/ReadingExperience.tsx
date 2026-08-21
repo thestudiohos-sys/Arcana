@@ -19,6 +19,8 @@ import {
 } from '../services/arcanaApi';
 import { determineRitualType } from '../services/ritualDeterminer';
 import { DICTIONARY } from '../config/dictionary';
+import { trackProductFunnel } from '../services/purchaseIntentAnalytics';
+import { ReadingAnalyticsCycle } from '../services/readingAnalyticsCycle';
 
 export type ExperienceViewMode = 'free' | 'premium' | 'symbolicNumbers' | 'digitalTalisman';
 
@@ -695,6 +697,7 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
   const premiumRef = useRef<HTMLDivElement>(null);
   const symbolicRef = useRef<HTMLDivElement>(null);
   const talismanRef = useRef<HTMLDivElement>(null);
+  const readingAnalyticsCycleRef = useRef(new ReadingAnalyticsCycle());
 
   const t = DICTIONARY[language].reading;
   const tarotCards = FREE_TAROT_CARDS_I18N[language] || FREE_TAROT_CARDS_I18N.en;
@@ -758,6 +761,8 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
   const startQuietMoment = () => {
     if (storyText.trim().length < 3) return;
 
+    readingAnalyticsCycleRef.current.start((event) => trackProductFunnel({ event, language }));
+
     // Determine RitualType based on local mock rules
     const determined = determineRitualType(selectedEntryType, storyText);
     setRitualType(determined);
@@ -802,6 +807,7 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
         });
       }
 
+      readingAnalyticsCycleRef.current.complete((event) => trackProductFunnel({ event, language }));
       setReadingResult(result);
       setTimeout(() => {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -825,6 +831,7 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
   };
 
   const handleStartOver = () => {
+    readingAnalyticsCycleRef.current.reset();
     setReadingResult(null);
     setSelectedCard(null);
     setSelectedEntryType('DREAM');

@@ -7,16 +7,28 @@ export type PurchaseIntentEventName =
   | 'coming_soon_viewed'
   | 'launch_interest_clicked';
 
-export interface PurchaseIntentEvent {
+export type ProductFunnelEventName = 'reading_started' | 'free_reading_completed';
+
+export type AnalyticsEventName = PurchaseIntentEventName | ProductFunnelEventName;
+
+export type AnalyticsSource = 'pricing' | 'free_result' | 'free_reading';
+
+export interface AnalyticsEvent {
   id: string;
-  event: PurchaseIntentEventName;
-  productId: ProductId;
+  event: AnalyticsEventName;
+  productId?: ProductId;
   language: 'ko' | 'en';
   sessionId: string;
   timestamp: string;
-  source: 'pricing' | 'free_result';
+  source: AnalyticsSource;
   priceKRW?: number;
   priceUSD?: number;
+}
+
+export interface PurchaseIntentEvent extends AnalyticsEvent {
+  event: PurchaseIntentEventName;
+  productId: ProductId;
+  source: 'pricing' | 'free_result';
 }
 
 export interface PurchaseIntentSummary {

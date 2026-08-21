@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "test:analytics": "node --test tests/frontend-analytics.test.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
