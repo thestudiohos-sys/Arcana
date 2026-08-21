@@ -1,6 +1,15 @@
 import { motion } from 'framer-motion';
 import { Language, ReadingResult } from '../types/reading';
 import { DICTIONARY } from '../config/dictionary';
+import { ARCANA_PRODUCTS } from '../config/products';
+
+// Same KO→KRW / EN→USD display rule already used in the Pricing section (App.tsx)
+function formatProductPrice(language: Language, productId: keyof typeof ARCANA_PRODUCTS): string {
+  const product = ARCANA_PRODUCTS[productId];
+  return language === 'ko'
+    ? `₩${product.priceKRW.toLocaleString()}`
+    : `$${product.priceUSD.toFixed(2)}`;
+}
 
 interface ReadingResultViewProps {
   language: Language;
@@ -178,6 +187,9 @@ export function ReadingResultView({
               <p className="text-white/60 text-[11px] font-light leading-relaxed">
                 {preview.items.deepReading.desc}
               </p>
+              <p className="text-[#c5a059] text-[14px] font-medium mt-3">
+                {formatProductPrice(language, 'deep_reading')}
+              </p>
             </div>
             <div className="mt-4 pt-3 border-t border-[#c5a059]/20 text-right">
               <button
@@ -205,6 +217,9 @@ export function ReadingResultView({
               <p className="text-white/60 text-[11px] font-light leading-relaxed">
                 {preview.items.luckyNumbers.desc}
               </p>
+              <p className="text-[#c5a059] text-[14px] font-medium mt-3">
+                {formatProductPrice(language, 'lucky_numbers')}
+              </p>
             </div>
             <div className="mt-4 pt-3 border-t border-[#c5a059]/20 text-right">
               <button
@@ -231,6 +246,9 @@ export function ReadingResultView({
               </h5>
               <p className="text-white/60 text-[11px] font-light leading-relaxed">
                 {preview.items.digitalTalisman.desc}
+              </p>
+              <p className="text-[#c5a059] text-[14px] font-medium mt-3">
+                {formatProductPrice(language, 'digital_talisman')}
               </p>
             </div>
             <div className="mt-4 pt-3 border-t border-[#c5a059]/20 text-right">

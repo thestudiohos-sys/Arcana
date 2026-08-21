@@ -8,6 +8,8 @@ export const DICTIONARY = {
       watermark: 'ARCANA',
       description:
         'Share a dream, concern, wish, relationship, or feeling that stayed with you. ARCANA connects your story with the card you choose to create a personalized symbolic reading.',
+      cta: 'Start Your Reading',
+      ctaSub: 'Begin with a free 1-card reading.',
     },
     cinematic: {
       text: 'Not every answer arrives as logic. Some appear as symbols. Some as feelings. Some as a single card you cannot ignore.',
@@ -241,6 +243,8 @@ export const DICTIONARY = {
       watermark: 'ARCANA',
       description:
         '꿈, 고민, 소망, 관계처럼 마음에 남아 있는 이야기를 적어보세요. 당신의 이야기와 선택한 카드를 연결해 하나의 개인화된 상징 리딩을 만나볼 수 있습니다.',
+      cta: '리딩 시작하기',
+      ctaSub: '무료 1장 리딩으로 시작하세요.',
     },
     cinematic: {
       text: '모든 답이 논리로 찾아오는 것은 아닙니다. 어떤 답은 상징으로, 어떤 답은 감정으로, 그리고 어떤 답은 외면할 수 없는 한 장의 카드로 나타납니다.',

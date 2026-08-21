@@ -227,6 +227,33 @@ export default function App() {
               >
                 {hero.description}
               </motion.p>
+
+              {/* Hero CTA — jumps to existing #reading section */}
+              <motion.div
+                className="flex flex-col items-start gap-2 mt-1"
+                initial={{ opacity: 0, y: 25 }}
+                animate={entranceComplete ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: 0.9,
+                  ease: [0.215, 0.61, 0.355, 1.0],
+                  delay: 0.4,
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    document.getElementById('reading')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  }
+                  className="px-8 py-3.5 sm:px-9 sm:py-4 rounded-full border border-[#c5a059] bg-[#c5a059] text-black hover:bg-[#d4b06a] transition-all duration-300 text-[12px] sm:text-[13px] tracking-[0.2em] uppercase font-medium cursor-pointer shadow-[0_0_20px_rgba(197,160,89,0.25)]"
+                >
+                  {hero.cta}
+                </button>
+                {hero.ctaSub && (
+                  <p className="text-white/40 text-[11px] sm:text-[12px] font-light">
+                    {hero.ctaSub}
+                  </p>
+                )}
+              </motion.div>
             </div>
 
             {/* Right heading */}
