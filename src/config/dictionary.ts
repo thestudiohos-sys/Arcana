@@ -177,6 +177,7 @@ export const DICTIONARY = {
             title: '3-Card Deep Reading',
             desc: 'Explore the current flow, hidden meaning, and what to carry forward.',
             cta: 'Continue with 3 Cards',
+            tag: 'DEEPER READING',
           },
           luckyNumbers: {
             title: 'Symbolic Lucky Numbers',
@@ -412,6 +413,7 @@ export const DICTIONARY = {
             title: '3장 심층 리딩',
             desc: '지금의 흐름, 숨겨진 의미, 앞으로 가져갈 메시지를 세 장의 카드로 더 깊게 살펴봅니다.',
             cta: '3장 리딩 이어가기',
+            tag: '더 깊은 리딩',
           },
           luckyNumbers: {
             title: '나만의 행운 숫자',

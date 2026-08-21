@@ -172,8 +172,8 @@ export function ReadingResultView({
 
         {/* 3 Premium Preview Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
-          {/* Item 1: Deep Reading */}
-          <div className="p-4 rounded-xl border border-[#c5a059]/40 bg-[#c5a059]/[0.03] flex flex-col justify-between text-left hover:border-[#c5a059] transition-colors duration-300 shadow-[0_0_20px_rgba(197,160,89,0.08)]">
+          {/* Item 1: Deep Reading — subtle emphasis as ARCANA's core premium experience */}
+          <div className="p-4 rounded-xl border border-[#c5a059]/60 bg-[#c5a059]/[0.05] flex flex-col justify-between text-left hover:border-[#c5a059] transition-colors duration-300 shadow-[0_0_24px_rgba(197,160,89,0.14)]">
             <div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[#c5a059] text-[14px]">✦</span>
@@ -181,6 +181,11 @@ export function ReadingResultView({
                   {preview.statusBadge}
                 </span>
               </div>
+              {preview.items.deepReading.tag && (
+                <span className="text-[9px] text-[#c5a059]/80 tracking-[0.15em] uppercase font-medium block mb-1">
+                  {preview.items.deepReading.tag}
+                </span>
+              )}
               <h5 className="text-white text-[13px] font-medium mb-1">
                 {preview.items.deepReading.title}
               </h5>

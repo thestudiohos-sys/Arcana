@@ -265,6 +265,7 @@ function PremiumReadingView({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isLoadingResult, setIsLoadingResult] = useState(false);
   const [premiumResult, setPremiumResult] = useState<import('../types/reading').PremiumReadingResult | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const dict = DICTIONARY[language].premiumExperience;
   const tarotCards = PREMIUM_TAROT_CARDS_I18N[language] || PREMIUM_TAROT_CARDS_I18N.en;
@@ -326,6 +327,7 @@ function PremiumReadingView({
     if (selectedCards.length !== 3 || isLoadingResult) return;
 
     setIsLoadingResult(true);
+    setErrorMessage(null);
     try {
       let result: import('../types/reading').PremiumReadingResult;
       if (READING_PROVIDER === 'api') {
@@ -348,7 +350,7 @@ function PremiumReadingView({
       setPremiumResult(result);
     } catch (err: any) {
       console.error('Error generating premium reading:', err);
-      alert(language === 'ko'
+      setErrorMessage(language === 'ko'
         ? '3장 심층 리딩을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'
         : "We couldn't load your 3-card deep reading right now.");
     } finally {
@@ -590,6 +592,18 @@ function PremiumReadingView({
                 : dict.viewReadingCta}
             </button>
 
+            {errorMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="max-w-md mx-auto px-4 py-3 rounded-xl border border-red-400/25 bg-red-400/[0.04]"
+              >
+                <p className="text-red-300/80 text-[12px] sm:text-[13px] font-light">
+                  {errorMessage}
+                </p>
+              </motion.div>
+            )}
+
             {/* Step Back & Reset options */}
             <div className="flex items-center justify-center gap-6 pt-2">
               <button
@@ -673,6 +687,7 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
   const [symbolicResult, setSymbolicResult] = useState<SymbolicNumberResult | null>(null);
   const [talismanResult, setTalismanResult] = useState<DigitalTalismanResult | null>(null);
   const [hasPremiumCardsForSymbolic, setHasPremiumCardsForSymbolic] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const resultRef = useRef<HTMLDivElement>(null);
   const selectionRef = useRef<HTMLDivElement>(null);
@@ -765,6 +780,7 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
     if (!selectedCard || isLoading) return;
 
     setIsLoading(true);
+    setErrorMessage(null);
     try {
       let result: ReadingResult;
       if (READING_PROVIDER === 'api') {
@@ -792,8 +808,8 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
       }, 100);
     } catch (err: any) {
       console.error('Error generating reading:', err);
-      alert(language === 'ko' 
-        ? '지금은 결과를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.' 
+      setErrorMessage(language === 'ko'
+        ? '지금은 결과를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'
         : "We couldn't load your result right now. Please try again.");
     } finally {
       setIsLoading(false);
@@ -833,6 +849,7 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
   };
 
   const handleStartSymbolicNumbers = async (premiumCardIds?: string[]) => {
+    setErrorMessage(null);
     try {
       let res: SymbolicNumberResult;
       if (READING_PROVIDER === 'api') {
@@ -864,13 +881,14 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
       }, 100);
     } catch (err: any) {
       console.error('Error generating symbolic numbers:', err);
-      alert(language === 'ko'
+      setErrorMessage(language === 'ko'
         ? '숫자를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'
         : "We couldn't load your symbolic numbers right now.");
     }
   };
 
   const handleStartDigitalTalisman = async (premiumCardIds?: string[]) => {
+    setErrorMessage(null);
     try {
       let res: DigitalTalismanResult;
       if (READING_PROVIDER === 'api') {
@@ -901,7 +919,7 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
       }, 100);
     } catch (err: any) {
       console.error('Error generating digital talisman:', err);
-      alert(language === 'ko'
+      setErrorMessage(language === 'ko'
         ? '부적을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'
         : "We couldn't load your talisman options right now.");
     }
@@ -1182,7 +1200,7 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center max-w-2xl mx-auto">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 items-center max-w-2xl mx-auto">
                     {tarotCards.map((card) => {
                       const isSelected = selectedCard === card.id;
                       const isDisabled = selectedCard !== null && !isSelected;
@@ -1218,6 +1236,18 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
                   >
                     {isLoading ? t.loading : t.cta}
                   </button>
+
+                  {errorMessage && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 max-w-md mx-auto px-4 py-3 rounded-xl border border-red-400/25 bg-red-400/[0.04]"
+                    >
+                      <p className="text-red-300/80 text-[12px] sm:text-[13px] font-light">
+                        {errorMessage}
+                      </p>
+                    </motion.div>
+                  )}
                 </motion.div>
               )}
             </motion.div>
@@ -1234,6 +1264,17 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
                   onStartSymbolicNumbers={() => handleStartSymbolicNumbers()}
                   onStartDigitalTalisman={() => handleStartDigitalTalisman()}
                 />
+                {errorMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 max-w-md mx-auto px-4 py-3 rounded-xl border border-red-400/25 bg-red-400/[0.04]"
+                  >
+                    <p className="text-red-300/80 text-[12px] sm:text-[13px] font-light text-center">
+                      {errorMessage}
+                    </p>
+                  </motion.div>
+                )}
               </div>
             )}
           </>
