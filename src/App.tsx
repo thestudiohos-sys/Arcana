@@ -16,15 +16,37 @@ import { trackPurchaseIntent } from './services/purchaseIntentAnalytics';
 import { VIDEO_URLS } from './config/videos';
 import { DICTIONARY } from './config/dictionary';
 import { ReadingExperience } from './components/ReadingExperience';
+import { DailyCardSection } from './components/DailyCardSection';
+import { cardLibraryUrl } from './content/cardPages';
+
+/** Initial language from ?lang=ko|en (used by links from the static card pages). */
+function getInitialLanguage(): Language {
+  try {
+    const lang = new URLSearchParams(window.location.search).get('lang');
+    return lang === 'ko' || lang === 'en' ? lang : 'en';
+  } catch {
+    return 'en';
+  }
+}
 
 export default function App() {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>(getInitialLanguage);
   const [entranceComplete, setEntranceComplete] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<ProductId | null>(null);
 
   useEffect(() => {
     document.documentElement.lang = language;
   }, [language]);
+
+  // Arriving from a card page with #reading: the section renders after load,
+  // so scroll to it once it exists.
+  useEffect(() => {
+    if (window.location.hash !== '#reading') return;
+    const timer = window.setTimeout(() => {
+      document.getElementById('reading')?.scrollIntoView({ block: 'start' });
+    }, 300);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   /* ── Hero video mouse-scrub & seamless autoplay fallback ── */
   const heroVideoRef = useRef<HTMLVideoElement>(null);
@@ -132,7 +154,7 @@ export default function App() {
 
   /* ── Destructure config for active language ── */
   const currentConfig = DICTIONARY[language];
-  const { hero, cinematic, metrics, technology, architecture, pricing, footer } = currentConfig;
+  const { hero, cinematic, metrics, technology, architecture, pricing, paymentTerms, footer } = currentConfig;
 
   return (
     <div style={{ fontFamily: '"Space Mono", monospace' }}>
@@ -526,6 +548,9 @@ export default function App() {
         </div>
       </section>
 
+      {/* ════════════════ SECTION 5.4: TODAY'S CARD ════════════════ */}
+      <DailyCardSection language={language} />
+
       {/* ════════════════ SECTION 5.5: READING EXPERIENCE ════════════════ */}
       <ReadingExperience language={language} />
 
@@ -552,10 +577,15 @@ export default function App() {
             <p className="text-white/60 text-[15px] sm:text-[17px] leading-relaxed max-w-xl mx-auto font-light mb-4">
               {pricing.description}
             </p>
-            {/* Free Boundary Assurance Notice */}
-            <div className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.02]">
-              <p className="text-white/50 text-[12px] font-light">
-                ✦ {pricing.freeBoundaryNotice}
+            {/* Free Boundary & One-Time Payment Assurance Notices */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.02]">
+                <p className="text-white/50 text-[12px] font-light">
+                  ✦ {pricing.freeBoundaryNotice}
+                </p>
+              </div>
+              <p className="text-white/50 text-[12px] font-light max-w-xl text-balance">
+                {paymentTerms.promise}
               </p>
             </div>
           </motion.div>
@@ -601,9 +631,12 @@ export default function App() {
                     </h3>
 
                     {/* Price Display */}
-                    <div className="flex items-baseline gap-1 my-3">
-                      <span className="text-white text-[32px] sm:text-[36px] font-light tracking-tight">
+                    <div className="my-3">
+                      <span className="text-white text-[32px] sm:text-[36px] font-light tracking-tight block">
                         {priceStr}
+                      </span>
+                      <span className="text-white/45 text-[11px] font-light block mt-1">
+                        {paymentTerms.oneTime}
                       </span>
                     </div>
 
@@ -702,6 +735,12 @@ export default function App() {
               <p className="text-white/40 text-[14px] sm:text-[15px] leading-relaxed max-w-sm">
                 {footer.tagline}
               </p>
+              <a
+                href={cardLibraryUrl(language)}
+                className="inline-block mt-4 text-[#c5a059]/80 hover:text-[#c5a059] text-[13px] underline-offset-4 hover:underline"
+              >
+                ✦ {footer.cardLibraryLink}
+              </a>
             </div>
 
             <p className="text-white/25 text-[12px] mt-12">
