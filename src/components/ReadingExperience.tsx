@@ -276,9 +276,11 @@ function PremiumReadingView({
   const isComplete = currentStepIndex === 3;
   const currentStepConfig = dict.steps[Math.min(currentStepIndex, 2)];
 
-  // Automatically regenerate premium result when language switches if a result exists
+  // Automatically regenerate premium result when language switches if a result exists.
+  // Only mock results are regenerated: in API mode the AI result is kept as-is, since
+  // re-calling the provider would cost an AI request and replace the reading's content.
   useEffect(() => {
-    if (selectedCards.length === 3 && premiumResult) {
+    if (READING_PROVIDER !== 'api' && selectedCards.length === 3 && premiumResult) {
       generateMockPremiumReading({
         language,
         entryType: selectedEntryType || 'CUSTOM',
@@ -702,9 +704,10 @@ export function ReadingExperience({ language }: ReadingExperienceProps) {
   const t = DICTIONARY[language].reading;
   const tarotCards = FREE_TAROT_CARDS_I18N[language] || FREE_TAROT_CARDS_I18N.en;
 
-  // Automatically regenerate reading result when language switches if a result exists
+  // Automatically regenerate reading result when language switches if a result exists.
+  // Only mock results are regenerated: in API mode the AI result is kept as-is.
   useEffect(() => {
-    if (selectedCard && readingResult) {
+    if (READING_PROVIDER !== 'api' && selectedCard && readingResult) {
       generateMockReading({
         language,
         topic: selectedEntryType || 'CUSTOM',

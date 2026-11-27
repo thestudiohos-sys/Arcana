@@ -99,8 +99,8 @@ class GeminiReadingProvider(BaseReadingProvider):
 
         cards_info = []
         for cid in req.cardIds:
-            info = TAROT_CARDS.get(cid, {"nameKo": cid, "nameEn": cid, "keyword": "상징"})
-            info["id"] = cid
+            # Copy so the shared TAROT_CARDS entry is never mutated across requests
+            info = {**TAROT_CARDS.get(cid, {"nameKo": cid, "nameEn": cid, "keyword": "상징"}), "id": cid}
             cards_info.append(info)
 
         prompt = build_premium_reading_prompt(
