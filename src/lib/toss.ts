@@ -12,6 +12,8 @@
 // https://docs.tosspayments.com/reference/widget-sdk
 // ============================================================
 
+import { ARCANA_PRODUCTS } from '../config/products';
+
 export const TOSS_CONFIG = {
   clientKey: import.meta.env.VITE_TOSS_CLIENT_KEY || 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq',
   customerKey: '', // 비회원은 빈 문자열, 회원은 고유 ID
@@ -29,28 +31,15 @@ export interface TossProduct {
   currency: string;    // 'KRW'
 }
 
-// ── 예시 상품 목록 — 여기를 수정하세요 ──
+// ── ARCANA Premium Ritual 상품 (KRW) ──
+// 상품 정보(이름·가격)는 src/config/products.ts 한 곳에서 관리합니다.
 
-export const TOSS_PRODUCTS: TossProduct[] = [
-  {
-    id: 'connect-ai-basic-kr',
-    name: 'Connect AI Basic 라이센스',
-    price: 29900,
-    currency: 'KRW',
-  },
-  {
-    id: 'connect-ai-pro-kr',
-    name: 'Connect AI Pro 라이센스',
-    price: 99000,
-    currency: 'KRW',
-  },
-  {
-    id: 'connect-ai-enterprise-kr',
-    name: 'Connect AI Enterprise 라이센스',
-    price: 299000,
-    currency: 'KRW',
-  },
-];
+export const TOSS_PRODUCTS: TossProduct[] = Object.values(ARCANA_PRODUCTS).map((product) => ({
+  id: product.id,
+  name: product.titleKo,
+  price: product.priceKRW,
+  currency: 'KRW',
+}));
 
 // ── 주문 ID 생성 헬퍼 ──
 

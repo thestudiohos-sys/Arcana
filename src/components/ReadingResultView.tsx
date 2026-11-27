@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Language, ReadingResult } from '../types/reading';
 import { DICTIONARY } from '../config/dictionary';
 import { ARCANA_PRODUCTS } from '../config/products';
+import { ShareCardModal } from './ShareCardModal';
 
 // Same KO→KRW / EN→USD display rule already used in the Pricing section (App.tsx)
 function formatProductPrice(language: Language, productId: keyof typeof ARCANA_PRODUCTS): string {
@@ -43,6 +45,9 @@ export function ReadingResultView({
 
   const t = DICTIONARY[language].resultView;
   const preview = t.premiumPreview;
+  const paymentTerms = DICTIONARY[language].paymentTerms;
+  const roleSteps = DICTIONARY[language].premiumExperience.steps;
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   return (
     <motion.div
@@ -131,6 +136,13 @@ export function ReadingResultView({
         <p className="text-white text-[15px] sm:text-[16px] italic font-light">
           "{talismanMessage}"
         </p>
+        <button
+          type="button"
+          onClick={() => setIsShareOpen(true)}
+          className="mt-5 px-5 py-2.5 rounded-full border border-[#c5a059]/60 text-[#c5a059] hover:bg-[#c5a059] hover:text-black transition-all duration-300 text-[11px] sm:text-[12px] tracking-[0.15em] uppercase font-medium cursor-pointer"
+        >
+          ✦ {t.shareCard.open}
+        </button>
       </div>
 
       {/* Disclaimer */}
@@ -170,60 +182,93 @@ export function ReadingResultView({
           </p>
         </div>
 
-        {/* 3 Premium Preview Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
-          {/* Item 1: Deep Reading — subtle emphasis as ARCANA's core premium experience */}
-          <div className="p-4 rounded-xl border border-[#c5a059]/60 bg-[#c5a059]/[0.05] flex flex-col justify-between text-left hover:border-[#c5a059] transition-colors duration-300 shadow-[0_0_24px_rgba(197,160,89,0.14)]">
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[#c5a059] text-[14px]">✦</span>
-                <span className="text-[10px] text-[#c5a059] border border-[#c5a059]/40 px-2 py-0.5 rounded font-mono uppercase">
-                  {preview.statusBadge}
+        {/* Featured bridge: the same story, continued in three cards */}
+        <div className="my-6 p-5 sm:p-6 rounded-xl border border-[#c5a059]/60 bg-[#c5a059]/[0.05] text-left shadow-[0_0_24px_rgba(197,160,89,0.14)]">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <span className="text-[9px] text-[#c5a059]/80 tracking-[0.15em] uppercase font-medium">
+              {preview.items.deepReading.tag} · {preview.items.deepReading.title}
+            </span>
+            <span className="text-[10px] text-[#c5a059] border border-[#c5a059]/40 px-2 py-0.5 rounded font-mono uppercase shrink-0">
+              {preview.statusBadge}
+            </span>
+          </div>
+          <h5 className="text-white text-[16px] sm:text-[18px] font-light leading-snug mb-4">
+            {preview.items.deepReading.bridgeTitle.replace('{{card}}', selectedCard.name)}
+          </h5>
+
+          {/* Output preview: the three card roles the deep reading fills */}
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4" aria-hidden="true">
+            {roleSteps.map((step) => (
+              <div
+                key={step.stepNumber}
+                className="aspect-[2/3] max-h-36 mx-auto w-full rounded-lg border border-dashed border-[#c5a059]/40 bg-black/30 flex flex-col items-center justify-center text-center px-1.5"
+              >
+                <span className="text-[#c5a059]/60 text-[18px] mb-1">✦</span>
+                <span className="text-[#c5a059]/60 text-[9px] font-mono">{step.stepNumber}</span>
+                <span className="text-white/70 text-[10px] sm:text-[11px] font-light leading-tight mt-1">
+                  {step.roleName}
                 </span>
               </div>
-              {preview.items.deepReading.tag && (
-                <span className="text-[9px] text-[#c5a059]/80 tracking-[0.15em] uppercase font-medium block mb-1">
-                  {preview.items.deepReading.tag}
-                </span>
-              )}
-              <h5 className="text-white text-[13px] font-medium mb-1">
-                {preview.items.deepReading.title}
-              </h5>
-              <p className="text-white/60 text-[11px] font-light leading-relaxed">
-                {preview.items.deepReading.desc}
-              </p>
-              <p className="text-[#c5a059] text-[14px] font-medium mt-3">
+            ))}
+          </div>
+          <p className="text-white/60 text-[11px] sm:text-[12px] font-light leading-relaxed mb-4">
+            {preview.items.deepReading.previewIncludes}
+          </p>
+
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pt-3 border-t border-[#c5a059]/20">
+            <div>
+              <p className="text-[#c5a059] text-[14px] font-medium">
                 {formatProductPrice(language, 'deep_reading')}
               </p>
+              <p className="text-white/45 text-[10px] font-light mt-0.5">
+                {paymentTerms.oneTime}
+              </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#c5a059]/20 text-right">
-              <button
-                type="button"
-                onClick={onStartPremiumReading}
-                className="text-[#c5a059] text-[11px] sm:text-[12px] font-medium hover:underline cursor-pointer flex items-center justify-end gap-1 ml-auto"
-              >
-                {preview.items.deepReading.cta} <span>→</span>
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={onStartPremiumReading}
+              className="w-full sm:w-auto px-5 py-2.5 rounded-full border border-[#c5a059] bg-[#c5a059]/10 text-[#c5a059] hover:bg-[#c5a059] hover:text-black transition-all duration-300 text-[11px] sm:text-[12px] tracking-[0.15em] uppercase font-medium cursor-pointer"
+            >
+              {preview.items.deepReading.cta} →
+            </button>
           </div>
+        </div>
 
-          {/* Item 2: Lucky Numbers */}
-          <div className="p-4 rounded-xl border border-[#c5a059]/40 bg-[#c5a059]/[0.03] flex flex-col justify-between text-left hover:border-[#c5a059] transition-colors duration-300 shadow-[0_0_20px_rgba(197,160,89,0.08)]">
+        {/* Secondary rituals with output previews */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Lucky Numbers */}
+          <div className="p-4 rounded-xl border border-[#c5a059]/40 bg-[#c5a059]/[0.03] flex flex-col justify-between text-left hover:border-[#c5a059] transition-colors duration-300">
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[#c5a059] text-[14px]">✦</span>
-                <span className="text-[10px] text-[#c5a059] border border-[#c5a059]/40 px-2 py-0.5 rounded font-mono uppercase">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <h5 className="text-white text-[13px] font-medium">
+                  {preview.items.luckyNumbers.title}
+                </h5>
+                <span className="text-[10px] text-[#c5a059] border border-[#c5a059]/40 px-2 py-0.5 rounded font-mono uppercase shrink-0">
                   {preview.statusBadge}
                 </span>
               </div>
-              <h5 className="text-white text-[13px] font-medium mb-1">
-                {preview.items.luckyNumbers.title}
-              </h5>
               <p className="text-white/60 text-[11px] font-light leading-relaxed">
                 {preview.items.luckyNumbers.desc}
               </p>
+              {/* Output preview: six symbolic number slots */}
+              <div className="flex gap-1.5 my-3" aria-hidden="true">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <span
+                    key={i}
+                    className="w-7 h-7 rounded-full border border-[#c5a059]/40 bg-black/30 text-[#c5a059]/60 text-[11px] flex items-center justify-center"
+                  >
+                    ✦
+                  </span>
+                ))}
+              </div>
+              <p className="text-white/45 text-[10px] font-light">
+                {preview.items.luckyNumbers.previewNote}
+              </p>
               <p className="text-[#c5a059] text-[14px] font-medium mt-3">
                 {formatProductPrice(language, 'lucky_numbers')}
+              </p>
+              <p className="text-white/45 text-[10px] font-light mt-0.5">
+                {paymentTerms.oneTime}
               </p>
             </div>
             <div className="mt-4 pt-3 border-t border-[#c5a059]/20 text-right">
@@ -237,23 +282,39 @@ export function ReadingResultView({
             </div>
           </div>
 
-          {/* Item 3: Digital Talisman */}
-          <div className="p-4 rounded-xl border border-[#c5a059]/40 bg-[#c5a059]/[0.03] flex flex-col justify-between text-left hover:border-[#c5a059] transition-colors duration-300 shadow-[0_0_20px_rgba(197,160,89,0.08)]">
+          {/* Digital Talisman */}
+          <div className="p-4 rounded-xl border border-[#c5a059]/40 bg-[#c5a059]/[0.03] flex flex-col justify-between text-left hover:border-[#c5a059] transition-colors duration-300">
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[#c5a059] text-[14px]">✦</span>
-                <span className="text-[10px] text-[#c5a059] border border-[#c5a059]/40 px-2 py-0.5 rounded font-mono uppercase">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <h5 className="text-white text-[13px] font-medium">
+                  {preview.items.digitalTalisman.title}
+                </h5>
+                <span className="text-[10px] text-[#c5a059] border border-[#c5a059]/40 px-2 py-0.5 rounded font-mono uppercase shrink-0">
                   {preview.statusBadge}
                 </span>
               </div>
-              <h5 className="text-white text-[13px] font-medium mb-1">
-                {preview.items.digitalTalisman.title}
-              </h5>
               <p className="text-white/60 text-[11px] font-light leading-relaxed">
                 {preview.items.digitalTalisman.desc}
               </p>
+              {/* Output preview: three 9:16 design frames */}
+              <div className="flex gap-2 my-3" aria-hidden="true">
+                {['✦', '☾', '✧'].map((glyph) => (
+                  <span
+                    key={glyph}
+                    className="w-9 aspect-[9/16] rounded border border-[#c5a059]/40 bg-gradient-to-b from-[#1a1710] to-black text-[#c5a059]/70 text-[12px] flex items-center justify-center"
+                  >
+                    {glyph}
+                  </span>
+                ))}
+              </div>
+              <p className="text-white/45 text-[10px] font-light">
+                {preview.items.digitalTalisman.previewNote}
+              </p>
               <p className="text-[#c5a059] text-[14px] font-medium mt-3">
                 {formatProductPrice(language, 'digital_talisman')}
+              </p>
+              <p className="text-white/45 text-[10px] font-light mt-0.5">
+                {paymentTerms.oneTime}
               </p>
             </div>
             <div className="mt-4 pt-3 border-t border-[#c5a059]/20 text-right">
@@ -268,6 +329,9 @@ export function ReadingResultView({
           </div>
         </div>
       </div>
+      {isShareOpen && (
+        <ShareCardModal language={language} result={result} onClose={() => setIsShareOpen(false)} />
+      )}
     </motion.div>
   );
 }

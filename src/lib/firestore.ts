@@ -1,7 +1,8 @@
 // ============================================================
-// Firestore Data Models & Helper Functions — TEMPLATE
+// Firestore Data Models & Helper Functions
 // ============================================================
-// Firestore 컬렉션 구조와 CRUD 헬퍼 함수 정의
+// users: 로그인 사용자 프로필 (AuthContext에서 사용)
+// orders: 결제 주문 기록 (실결제 연동 시 서버 승인 후 기록)
 // ============================================================
 
 import {
@@ -11,7 +12,6 @@ import {
   getDocs,
   setDoc,
   updateDoc,
-  deleteDoc,
   query,
   where,
   orderBy,
@@ -26,8 +26,6 @@ import { db } from './firebase';
 export const COLLECTIONS = {
   USERS: 'users',
   ORDERS: 'orders',
-  SUBSCRIPTIONS: 'subscriptions',
-  PRODUCTS: 'products',
 } as const;
 
 // ── Data Types ──
@@ -39,13 +37,6 @@ export interface UserProfile {
   photoURL: string | null;
   createdAt: Timestamp;
   updatedAt: Timestamp;
-  subscription?: {
-    planId: string;
-    status: 'active' | 'cancelled' | 'expired';
-    paypalSubscriptionId: string;
-    startDate: Timestamp;
-    endDate?: Timestamp;
-  };
 }
 
 export interface Order {
@@ -60,17 +51,6 @@ export interface Order {
   paypalPayerId?: string;
   createdAt: Timestamp;
   completedAt?: Timestamp;
-}
-
-export interface SubscriptionRecord {
-  id: string;
-  userId: string;
-  planId: string;
-  paypalSubscriptionId: string;
-  status: 'active' | 'cancelled' | 'suspended' | 'expired';
-  startDate: Timestamp;
-  nextBillingDate?: Timestamp;
-  cancelledAt?: Timestamp;
 }
 
 // ── User Helpers ──
@@ -143,44 +123,4 @@ export async function getUserOrders(userId: string): Promise<Order[]> {
   );
   const snap = await getDocs(q);
   return snap.docs.map((d) => d.data() as Order);
-}
-
-// ── Subscription Helpers ──
-
-export async function createSubscriptionRecord(
-  sub: Omit<SubscriptionRecord, 'startDate'>
-): Promise<void> {
-  const ref = doc(db, COLLECTIONS.SUBSCRIPTIONS, sub.id);
-  await setDoc(ref, {
-    ...sub,
-    startDate: serverTimestamp(),
-  });
-}
-
-export async function cancelSubscription(subscriptionId: string): Promise<void> {
-  const ref = doc(db, COLLECTIONS.SUBSCRIPTIONS, subscriptionId);
-  await updateDoc(ref, {
-    status: 'cancelled',
-    cancelledAt: serverTimestamp(),
-  });
-}
-
-export async function getActiveSubscription(
-  userId: string
-): Promise<SubscriptionRecord | null> {
-  const q = query(
-    collection(db, COLLECTIONS.SUBSCRIPTIONS),
-    where('userId', '==', userId),
-    where('status', '==', 'active'),
-    limit(1)
-  );
-  const snap = await getDocs(q);
-  return snap.empty ? null : (snap.docs[0].data() as SubscriptionRecord);
-}
-
-// ── Product Helpers ──
-
-export async function deleteProduct(productId: string): Promise<void> {
-  const ref = doc(db, COLLECTIONS.PRODUCTS, productId);
-  await deleteDoc(ref);
 }

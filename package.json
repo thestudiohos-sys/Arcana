@@ -1,11 +1,12 @@
 {
-  "name": "vanguard",
+  "name": "arcana-by-hos",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "test": "node --test tests/*.test.mjs",
     "test:analytics": "node --test tests/frontend-analytics.test.mjs",
     "preview": "vite preview"
   },

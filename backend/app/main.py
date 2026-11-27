@@ -1,3 +1,12 @@
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+# Load backend/.env before anything reads os.environ (CORS below reads it at import time).
+# Variables already set in the real environment take precedence over the file.
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import analytics, readings, numbers, talismans
@@ -7,8 +16,6 @@ app = FastAPI(
     description="Development-only local mock backend providing JSON endpoints for Arcana readings, symbolic numbers, and digital talismans.",
     version="0.1.0",
 )
-
-import os
 
 # CORS configuration with environment variable support
 default_origins = [
@@ -40,7 +47,6 @@ app.include_router(analytics.router, prefix="/api")
 
 @app.get("/api/health")
 def health_check():
-    import os
     provider_name = os.environ.get("READING_PROVIDER", "mock").lower()
     return {
         "status": "ok",

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Language } from '../types/reading';
 import { ArcanaProduct } from '../config/products';
+import { DICTIONARY } from '../config/dictionary';
 import { trackPurchaseIntent } from '../services/purchaseIntentAnalytics';
 import { PaymentComingSoon } from './PaymentComingSoon';
 
@@ -31,6 +32,7 @@ export function MockCheckoutSummary({ language, product, onClose }: MockCheckout
   const title = isKo ? product.titleKo : product.titleEn;
   const description = isKo ? product.descriptionKo : product.descriptionEn;
   const features = isKo ? product.featuresKo : product.featuresEn;
+  const paymentTerms = DICTIONARY[language].paymentTerms;
 
   const paymentClickedRef = useRef(false);
 
@@ -106,13 +108,18 @@ export function MockCheckoutSummary({ language, product, onClose }: MockCheckout
 
         {/* Price & Features */}
         <div className="p-5 rounded-xl border border-white/10 bg-white/[0.02] mb-6">
-          <div className="flex items-baseline justify-between mb-4 border-b border-white/10 pb-3">
-            <span className="text-white/60 text-[13px] font-medium">
-              {isKo ? '결제 금액' : 'Total Amount'}
-            </span>
-            <span className="text-[#c5a059] text-[28px] sm:text-[32px] font-light tracking-tight">
-              {priceDisplay}
-            </span>
+          <div className="mb-4 border-b border-white/10 pb-3">
+            <div className="flex items-baseline justify-between">
+              <span className="text-white/60 text-[13px] font-medium">
+                {isKo ? '결제 금액' : 'Total Amount'}
+              </span>
+              <span className="text-[#c5a059] text-[28px] sm:text-[32px] font-light tracking-tight">
+                {priceDisplay}
+              </span>
+            </div>
+            <p className="text-white/55 text-[12px] font-light leading-relaxed mt-2">
+              ✦ {paymentTerms.checkoutNote}
+            </p>
           </div>
 
           <h4 className="text-white/80 text-[12px] tracking-[0.15em] uppercase font-medium mb-3">
@@ -140,9 +147,9 @@ export function MockCheckoutSummary({ language, product, onClose }: MockCheckout
           <button
             type="button"
             onClick={onClose}
-            className="w-full py-2.5 text-white/50 hover:text-white text-[12px] tracking-wider transition-colors cursor-pointer text-center"
+            className="w-full py-3 rounded-full border border-white/20 text-white/70 hover:text-white hover:border-white/40 text-[12px] tracking-wider transition-colors cursor-pointer text-center"
           >
-            {isKo ? '돌아가기' : 'Go Back'}
+            {paymentTerms.decline}
           </button>
         </div>
       </div>
